@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Body, FastAPI
+from fastapi import APIRouter, Body, FastAPI, Response
 from utils.auth import Auth
 
 app=FastAPI()
@@ -18,9 +18,10 @@ def register(
 
 @api.post("/login")
 def login(
+    response: Response,
     username: str = Body(""),
-    password: str = Body("")
+    password: str = Body(""),
 ):
-    return auth.login(username, password)
+    return auth.login(username, password, response)
 
 app.include_router(api)
