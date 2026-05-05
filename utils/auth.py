@@ -1,6 +1,6 @@
 import datetime
 import sqlite3
-from fastapi import Response
+from fastapi import Header, Response
 from nanoid import generate
 import bcrypt
 from utils.types import toResponse
@@ -77,9 +77,11 @@ class Auth:
         else:
             return toResponse(False, "密码错误")
     
-    def check(self, token: str):
+    def check(self, token: str= Header(None)):
+        if not token:
+            return toResponse(False, "Token 不能为空")
         try:
-            data = jwt.decode(token, self.access_secret, algorithms=[ALGORITHM])
+            jwt.decode(token, self.access_secret, algorithms=[ALGORITHM])
             return toResponse(True, "")
         except jwt.exceptions.DecodeError:
             return toResponse(False, "Token 解析错误")

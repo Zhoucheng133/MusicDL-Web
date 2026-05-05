@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Body, FastAPI, Response
+from fastapi import APIRouter, Body, FastAPI, Response, Depends
 from utils.auth import Auth
 
 app=FastAPI()
@@ -6,7 +6,9 @@ api=APIRouter(prefix="/api")
 auth=Auth()
 
 @api.get("/test")
-def read_root():
+def read_root(check=Depends(auth.check)):
+    if not check.get("ok"):
+        return check
     return {"Hello": "World"}
 
 @api.post("/register")
