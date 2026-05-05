@@ -87,3 +87,19 @@ class Auth:
             return toResponse(False, "Token 解析错误")
         except jwt.exceptions.ExpiredSignatureError:
             return toResponse(False, "Token 已过期")
+    
+    def refresh(self, token: str= Header(None)):
+        if not token:
+            return toResponse(False, "Refresh Token 不能为空")
+        try:
+            payload=jwt.decode(token, self.refresh_secret, algorithms=[ALGORITHM])
+            data={
+                "username": payload["username"],
+                "exp": datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(minutes=30)
+            }
+            access_token = jwt.encode(data, self.access_secret, algorithm=ALGORITHM)
+            return toResponse(True, access_token)
+        except jwt.exceptions.DecodeError:
+            return toResponse(False, "Token 解析错误")
+        except jwt.exceptions.ExpiredSignatureError:
+            return toResponse(False, "Token 已过期")
