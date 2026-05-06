@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Body, FastAPI, Response, Depends
+from fastapi import APIRouter, BackgroundTasks, Body, FastAPI, Query, Response, Depends
 from utils.auth import Auth
 from utils.core import Core
 
@@ -41,5 +41,38 @@ def search(
     if not check.get("ok"):
         return check
     return core.search(keyword, client)
+
+@api.post("/download")
+def download(
+    background_tasks: BackgroundTasks,
+    check=Depends(auth.check),
+    name: str = Body(""),
+    artist: str = Body(""),
+    url: str = Body(""),
+    cover: str = Body(""),
+    album: str = Body(""),
+    quality: str = Body("")
+):
+    if not check.get("ok"):
+        return check
+    return core.download(name, artist, url, cover, album, quality, background_tasks)
+
+@api.get("/get")
+def get(
+    check=Depends(auth.check),
+    name: str = Query(""),
+    artist: str = Query("")
+):
+    if not check.get("ok"):
+        return check
+    return core.get_file(name, artist)
+
+@api.get("/progress")
+def progress(
+    check=Depends(auth.check),
+):
+    if not check.get("ok"):
+        return check
+    return core.progress
 
 app.include_router(api)
