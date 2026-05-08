@@ -42,6 +42,15 @@ def search(
         return check
     return core.search(keyword, client)
 
+@api.get("/nouser")
+def nouser():
+    return auth.nouser()
+
+@api.get("/check")
+def check(check=Depends(auth.check)):
+    if not check.get("ok"):
+        return check
+
 @api.post("/download")
 def download(
     background_tasks: BackgroundTasks,

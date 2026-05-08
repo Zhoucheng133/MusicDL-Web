@@ -25,6 +25,14 @@ class Auth:
             )
         ''')
         conn.close()
+
+    def nouser(self):
+        conn = sqlite3.connect('db/database.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT COUNT(*) FROM user')
+        count = cursor.fetchone()[0]
+        conn.close()
+        return toResponse(True, count == 0)
     
     def register(self, username: str, password: str):
         if not username or not password:
