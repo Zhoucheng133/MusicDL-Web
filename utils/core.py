@@ -124,3 +124,12 @@ class Core:
             filename=f"{artist}-{name}.mp3",
             media_type="audio/mpeg"
         )
+    
+    def ls(self):
+        if self.lock:
+            return toResponse(False, "有任务在进行中")
+        
+        files = os.listdir("./downloads")
+        files_sorted = sorted(files, key=lambda x: os.path.getctime(os.path.join("./downloads", x)))
+        names_without_extension = [os.path.splitext(f)[0] for f in files_sorted]
+        return toResponse(True, names_without_extension)

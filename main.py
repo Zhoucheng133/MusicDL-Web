@@ -83,4 +83,12 @@ def progress(
         return check
     return core.progress
 
+@api.get("/list")
+def ls(
+    check=Depends(auth.check),
+):
+    if not check.get("ok"):
+        return check
+    return core.ls()
+
 app.include_router(api)
