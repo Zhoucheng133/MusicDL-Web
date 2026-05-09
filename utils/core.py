@@ -49,7 +49,7 @@ class Core:
                 
                 ext = os.path.splitext(url.split('?')[0])[-1] or ".mp3"
                 temp_path = f"./cache/temp{ext}"
-                final__path = f"./cache/{artist}-{name}.mp3"
+                final__path = f"./downloads/{artist}-{name}.mp3"
                 
                 downloaded_size = 0
                 with open(temp_path, 'wb') as f:
@@ -113,7 +113,7 @@ class Core:
         if self.lock:
             return toResponse(False, "有任务在进行中")
         
-        file_path=f"./cache/{artist}-{name}.mp3"
+        file_path=f"./downloads/{artist}-{name}.mp3"
         if not os.path.exists(file_path):
             return toResponse(False, "文件不存在")
         
