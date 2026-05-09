@@ -48,8 +48,7 @@ def nouser():
 
 @api.get("/check")
 def check(check=Depends(auth.check)):
-    if not check.get("ok"):
-        return check
+    return check
 
 @api.post("/download")
 def download(
