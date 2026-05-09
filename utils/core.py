@@ -26,6 +26,8 @@ class Core:
     def search(self, keyword: str, client: str):
         if not keyword or not client:
             return toResponse(False, "参数不正确")
+        if self.lock:
+            return toResponse(False, "有任务在进行中")
         self.client.music_sources=[client]
         search_results = self.client.search(keyword)
         local_list = []
