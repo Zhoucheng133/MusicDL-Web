@@ -81,7 +81,7 @@ def progress(
 ):
     if not check.get("ok"):
         return check
-    return core.progress
+    return core.get_progress()
 
 @api.get("/list")
 def ls(
