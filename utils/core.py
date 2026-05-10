@@ -125,6 +125,19 @@ class Core:
             media_type="audio/mpeg"
         )
     
+    def del_file(self, name: str, artist: str):
+        if not name or not artist:
+            return toResponse(False, "参数不正确")
+        if self.lock:
+            return toResponse(False, "有任务在进行中")
+        
+        file_path=f"./downloads/{artist}-{name}.mp3"
+        if not os.path.exists(file_path):
+            return toResponse(False, "文件不存在")
+        
+        os.remove(file_path)
+        return toResponse(True, "")
+    
     def ls(self):
         if self.lock:
             return toResponse(False, "有任务在进行中")

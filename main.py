@@ -91,4 +91,14 @@ def ls(
         return check
     return core.ls()
 
+@api.delete("/del")
+def delete(
+    check=Depends(auth.check),
+    name: str = Query(""),
+    artist: str = Query("")
+):
+    if not check.get("ok"):
+        return check
+    return core.del_file(name, artist)
+
 app.include_router(api)
