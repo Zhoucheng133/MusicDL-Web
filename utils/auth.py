@@ -11,10 +11,10 @@ ALGORITHM = "HS256"
 class Auth:
     def __init__(self):
         # TODO 注意测试代码
-        # self.refresh_secret = generate()
-        # self.access_secret = generate()
-        self.refresh_secret = "REFRESH"
-        self.access_secret = "SECRET"
+        self.refresh_secret = generate()
+        self.access_secret = generate()
+        # self.refresh_secret = "REFRESH"
+        # self.access_secret = "SECRET"
         conn = sqlite3.connect('db/database.db')
         cursor = conn.cursor()
         cursor.execute('''
