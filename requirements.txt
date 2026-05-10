@@ -1,0 +1,9 @@
+fastapi==0.136.1
+musicdl==2.10.2
+nanoid==2.0.0
+PyJWT==2.12.1
+bcrypt==5.0.0
+Requests==2.33.1
+uvicorn==0.46.0
+pycryptodome==3.23.0
+pycryptodomex==3.23.0
