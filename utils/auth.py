@@ -1,6 +1,6 @@
 import datetime
 import sqlite3
-from fastapi import Header, Response
+from fastapi import Cookie, Header, Response
 from nanoid import generate
 import bcrypt
 from utils.types import toResponse
@@ -94,23 +94,23 @@ class Auth:
         try:
             jwt.decode(token, self.access_secret, algorithms=[ALGORITHM])
             return toResponse(True, "")
-        except jwt.exceptions.DecodeError:
-            return toResponse(False, "Token 解析错误")
         except jwt.exceptions.ExpiredSignatureError:
             return toResponse(False, "Token 已过期")
+        except jwt.exceptions.DecodeError:
+            return toResponse(False, "Token 解析错误")
     
-    def refresh(self, token: str= Header(None)):
-        if not token:
+    def refresh(self, refresh_token: str = Cookie(None)):
+        if not refresh_token:
             return toResponse(False, "Refresh Token 不能为空")
         try:
-            payload=jwt.decode(token, self.refresh_secret, algorithms=[ALGORITHM])
+            payload=jwt.decode(refresh_token, self.refresh_secret, algorithms=[ALGORITHM])
             data={
                 "username": payload["username"],
                 "exp": datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(minutes=30)
             }
             access_token = jwt.encode(data, self.access_secret, algorithm=ALGORITHM)
             return toResponse(True, access_token)
-        except jwt.exceptions.DecodeError:
-            return toResponse(False, "Token 解析错误")
         except jwt.exceptions.ExpiredSignatureError:
             return toResponse(False, "Token 已过期")
+        except jwt.exceptions.DecodeError:
+            return toResponse(False, "Token 解析错误")
