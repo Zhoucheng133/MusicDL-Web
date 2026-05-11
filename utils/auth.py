@@ -8,7 +8,6 @@ from utils.types import toResponse
 import jwt
 from pathlib import Path
 from dotenv import load_dotenv, set_key
-import secrets
 
 ALGORITHM = "HS256"
 DB_DIR = Path("db")
