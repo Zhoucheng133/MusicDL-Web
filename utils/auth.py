@@ -103,10 +103,11 @@ class Auth:
             expire = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=180)
             data = {
                 "username": username,
+                "iat": datetime.datetime.now(datetime.timezone.utc),
                 "exp": expire
             }
             refresh_token = jwt.encode(data, self.refresh_secret, algorithm=ALGORITHM)
-            response.set_cookie(key="refresh_token", value=refresh_token, httponly=True, path="/api/refresh")
+            response.set_cookie(key="musicdl_refresh_token", value=refresh_token, httponly=True, path="/api/refresh")
 
             data["exp"] = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(minutes=30)
             access_token = jwt.encode(data, self.access_secret, algorithm=ALGORITHM)
@@ -125,13 +126,14 @@ class Auth:
         except jwt.exceptions.DecodeError:
             return toResponse(False, "Token 解析错误")
     
-    def refresh(self, refresh_token: str = Cookie(None)):
-        if not refresh_token:
+    def refresh(self, musicdl_refresh_token: str = Cookie(None)):
+        if not musicdl_refresh_token:
             return toResponse(False, "Refresh Token 不能为空")
         try:
-            payload=jwt.decode(refresh_token, self.refresh_secret, algorithms=[ALGORITHM])
+            payload=jwt.decode(musicdl_refresh_token, self.refresh_secret, algorithms=[ALGORITHM])
             data={
                 "username": payload["username"],
+                "iat": datetime.datetime.now(datetime.timezone.utc),
                 "exp": datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(minutes=30)
             }
             access_token = jwt.encode(data, self.access_secret, algorithm=ALGORITHM)
