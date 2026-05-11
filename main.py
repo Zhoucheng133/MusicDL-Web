@@ -33,9 +33,10 @@ def login(
     return auth.login(username, password, response)
 
 @api.websocket("/ws/search")
-async def websocket_search(websocket: WebSocket, check = Depends(auth.check)):
+async def websocket_search(websocket: WebSocket):
     await websocket.accept()
-
+    token = websocket.query_params.get("token")
+    check = auth.checkStr(token)
     try:
         data = await websocket.receive_json()
         keyword = data.get("keyword", "")

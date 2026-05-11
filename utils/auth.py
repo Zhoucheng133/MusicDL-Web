@@ -114,6 +114,17 @@ class Auth:
             return toResponse(True, access_token)
         else:
             return toResponse(False, "密码错误")
+        
+    def checkStr(self, token: str | None):
+        if not token:
+            return toResponse(False, "Token 不能为空")
+        try:
+            jwt.decode(token, self.access_secret, algorithms=[ALGORITHM])
+            return toResponse(True, "")
+        except jwt.exceptions.ExpiredSignatureError:
+            return toResponse(False, "Token 已过期")
+        except jwt.exceptions.DecodeError:
+            return toResponse(False, "Token 解析错误")
     
     def check(self, token: str= Header(None)):
         if not token:
