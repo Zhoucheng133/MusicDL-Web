@@ -15,10 +15,8 @@ class Core:
     def __init__(self):
         self.lock=False
         self.progress=0
-        if not Path(DOWNLOAD_DIR).exists():
-            Path(DOWNLOAD_DIR).touch()
-        if not Path(CACHE_DIR).exists():
-            Path(CACHE_DIR).touch()
+        Path(DOWNLOAD_DIR).mkdir(parents=True, exist_ok=True)
+        Path(CACHE_DIR).mkdir(parents=True, exist_ok=True)
         init_music_clients_cfg = dict()
         init_music_clients_cfg['NeteaseMusicClient'] = {'work_dir': f'{CACHE_DIR}/musicdl/Netease'}
         init_music_clients_cfg['QQMusicClient'] = {'work_dir': f'{CACHE_DIR}/musicdl/QQ'}
