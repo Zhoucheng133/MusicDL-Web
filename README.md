@@ -2,8 +2,8 @@
 
 🏗️ 开发中 | Undeer development
 
-sudo docker run -d --restart always -p 10123:80 \
--v /DATA/AppData/musicdl/cache:/app/cache \
--v /DATA/AppData/musicdl/downloads:/app/downloads \
--v /DATA/AppData/musicdl/db:/app/db \
---name musicdl musicdl
+sudo docker run -d --restart always -p :80 \
+-v <缓存位置>:/app/cache 10123\
+-v <下载目录>:/app/downloads \
+-v <用户数据>:/app/db \
+zhouc1230/musicdl:latest
