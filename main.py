@@ -1,4 +1,4 @@
-from fastapi import APIRouter, BackgroundTasks, Body, FastAPI, Query, Response, Depends
+from fastapi import APIRouter, BackgroundTasks, Body, FastAPI, Query, Response, Depends, WebSocket, WebSocketDisconnect
 from utils.auth import Auth
 from utils.core import Core
 
@@ -31,6 +31,26 @@ def login(
     password: str = Body(""),
 ):
     return auth.login(username, password, response)
+
+@api.websocket("/ws/search")
+async def websocket_search(websocket: WebSocket, check = Depends(auth.check)):
+    await websocket.accept()
+
+    try:
+        data = await websocket.receive_json()
+        keyword = data.get("keyword", "")
+        client_param = data.get("client", "")
+
+        if not check.get("ok"):
+            await websocket.send_json(check)
+        else:
+            result = core.search(keyword, client_param)
+            await websocket.send_json(result)
+
+    except WebSocketDisconnect:
+        print("Client disconnected")
+    finally:
+        await websocket.close()
 
 @api.post("/search")
 def search(
