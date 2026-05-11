@@ -1,30 +1,57 @@
 import datetime
+import os
 import sqlite3
 from fastapi import Cookie, Header, Response
 from nanoid import generate
 import bcrypt
 from utils.types import toResponse
 import jwt
+from pathlib import Path
+from dotenv import load_dotenv, set_key
+import secrets
 
 ALGORITHM = "HS256"
+DB_DIR = Path("db")
+DB_DIR.mkdir(exist_ok=True)
+ENV_PATH = DB_DIR / ".env"
+
+def get_or_create_secrets():
+    if not ENV_PATH.exists():
+        ENV_PATH.touch()
+
+    load_dotenv(ENV_PATH)
+
+    access_secret = os.getenv("ACCESS_SECRET")
+    refresh_secret = os.getenv("REFRESH_SECRET")
+
+    if not access_secret or not refresh_secret:
+        access_secret = access_secret or generate()
+        refresh_secret = refresh_secret or generate()
+        
+        set_key(str(ENV_PATH), "ACCESS_SECRET", access_secret)
+        set_key(str(ENV_PATH), "REFRESH_SECRET", refresh_secret)
+        print(f"✨ 密钥已初始化并存入 {ENV_PATH}")
+    
+    return access_secret, refresh_secret
 
 class Auth:
     def __init__(self):
-        # TODO 注意测试代码
-        self.refresh_secret = generate()
-        self.access_secret = generate()
-        # self.refresh_secret = "REFRESH"
-        # self.access_secret = "SECRET"
-        conn = sqlite3.connect('db/database.db')
-        cursor = conn.cursor()
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS user (
-                id TEXT PRIMARY KEY,
-                username TEXT,
-                password TEXT
-            )
-        ''')
-        conn.close()
+        self.access_secret, self.refresh_secret = get_or_create_secrets()
+        
+        self.db_path = 'db/database.db'
+        self._init_db()
+
+    def _init_db(self):
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS user (
+                    id TEXT PRIMARY KEY,
+                    username TEXT,
+                    password TEXT
+                )
+            ''')
+            conn.commit()
 
     def nouser(self):
         conn = sqlite3.connect('db/database.db')
