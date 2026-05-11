@@ -10,7 +10,7 @@ import subprocess
 class Core:
     def __init__(self):
         self.lock=False
-        home_dir = "./cache"
+        home_dir = "./db/cache"
         self.progress=0
         init_music_clients_cfg = dict()
         init_music_clients_cfg['NeteaseMusicClient'] = {'work_dir': f'{home_dir}/musicdl/Netease'}
@@ -50,8 +50,8 @@ class Core:
                 total_size = int(r.headers.get('content-length', 0))
                 
                 ext = os.path.splitext(url.split('?')[0])[-1] or ".mp3"
-                temp_path = f"./cache/temp{ext}"
-                final__path = f"./downloads/{artist}-{name}.mp3"
+                temp_path = f"./db/cache/temp{ext}"
+                final__path = f"./db/downloads/{artist}-{name}.mp3"
                 
                 downloaded_size = 0
                 with open(temp_path, 'wb') as f:
@@ -115,7 +115,7 @@ class Core:
         if self.lock:
             return toResponse(False, "有任务在进行中")
         
-        file_path=f"./downloads/{artist}-{name}.mp3"
+        file_path=f"./db/downloads/{artist}-{name}.mp3"
         if not os.path.exists(file_path):
             return toResponse(False, "文件不存在")
         
@@ -131,7 +131,7 @@ class Core:
         if self.lock:
             return toResponse(False, "有任务在进行中")
         
-        file_path=f"./downloads/{artist}-{name}.mp3"
+        file_path=f"./db/downloads/{artist}-{name}.mp3"
         if not os.path.exists(file_path):
             return toResponse(False, "文件不存在")
         
@@ -142,7 +142,7 @@ class Core:
         if self.lock:
             return toResponse(False, "有任务在进行中")
         
-        files = [f for f in os.listdir("./downloads") if not f.startswith(".")]
-        files_sorted = sorted(files, key=lambda x: os.path.getctime(os.path.join("./downloads", x)))
+        files = [f for f in os.listdir("./db/downloads") if not f.startswith(".")]
+        files_sorted = sorted(files, key=lambda x: os.path.getctime(os.path.join("./db/downloads", x)))
         names_without_extension = [os.path.splitext(f)[0] for f in files_sorted]
         return toResponse(True, names_without_extension)
