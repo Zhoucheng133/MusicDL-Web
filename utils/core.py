@@ -6,18 +6,25 @@ from musicdl import musicdl
 from utils.types import toResponse
 import requests
 import subprocess
+from pathlib import Path
+
+DOWNLOAD_DIR = "./db/downloads"
+CACHE_DIR = "./db/cache"
 
 class Core:
     def __init__(self):
         self.lock=False
-        home_dir = "./db/cache"
         self.progress=0
+        if not Path(DOWNLOAD_DIR).exists():
+            Path(DOWNLOAD_DIR).touch()
+        if not Path(CACHE_DIR).exists():
+            Path(CACHE_DIR).touch()
         init_music_clients_cfg = dict()
-        init_music_clients_cfg['NeteaseMusicClient'] = {'work_dir': f'{home_dir}/musicdl/Netease'}
-        init_music_clients_cfg['QQMusicClient'] = {'work_dir': f'{home_dir}/musicdl/QQ'}
-        init_music_clients_cfg['MiguMusicClient'] = {'work_dir': f'{home_dir}/musicdl/migu'}
-        init_music_clients_cfg['KuwoMusicClient'] = {'work_dir': f'{home_dir}/musicdl/kuwo'}
-        init_music_clients_cfg['QianqianMusicClient'] = {'work_dir': f'{home_dir}/musicdl/qianqian'}
+        init_music_clients_cfg['NeteaseMusicClient'] = {'work_dir': f'{CACHE_DIR}/musicdl/Netease'}
+        init_music_clients_cfg['QQMusicClient'] = {'work_dir': f'{CACHE_DIR}/musicdl/QQ'}
+        init_music_clients_cfg['MiguMusicClient'] = {'work_dir': f'{CACHE_DIR}/musicdl/migu'}
+        init_music_clients_cfg['KuwoMusicClient'] = {'work_dir': f'{CACHE_DIR}/musicdl/kuwo'}
+        init_music_clients_cfg['QianqianMusicClient'] = {'work_dir': f'{CACHE_DIR}/musicdl/qianqian'}
 
         self.client = musicdl.MusicClient(
             init_music_clients_cfg=init_music_clients_cfg
