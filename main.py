@@ -1,6 +1,7 @@
 from fastapi import APIRouter, BackgroundTasks, Body, FastAPI, Query, Response, Depends, WebSocket, WebSocketDisconnect
 from utils.auth import Auth
 from utils.core import Core
+from fastapi.concurrency import run_in_threadpool
 
 app=FastAPI()
 api=APIRouter(prefix="/api")
@@ -45,9 +46,8 @@ async def websocket_search(websocket: WebSocket):
         if not check.get("ok"):
             await websocket.send_json(check)
         else:
-            result = core.search(keyword, client_param)
+            result = await run_in_threadpool(core.search, keyword, client_param)
             await websocket.send_json(result)
-
     except WebSocketDisconnect:
         print("Client disconnected")
     finally:
