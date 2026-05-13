@@ -107,7 +107,13 @@ class Auth:
                 "exp": expire
             }
             refresh_token = jwt.encode(data, self.refresh_secret, algorithm=ALGORITHM)
-            response.set_cookie(key="musicdl_refresh_token", value=refresh_token, httponly=True, path="/api/refresh")
+            response.set_cookie(
+                key="musicdl_refresh_token", 
+                value=refresh_token, 
+                httponly=True, 
+                path="/api/refresh",
+                expires=expire
+            )
 
             data["exp"] = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(minutes=30)
             access_token = jwt.encode(data, self.access_secret, algorithm=ALGORITHM)
