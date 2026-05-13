@@ -22,8 +22,28 @@
 
 ## 快速开始
 
+### 部署
+
 ```bash
-sudo docker run -d --restart always -p <端口号>:80 \
+sudo docker run -d \
+--restart always -p <端口号>:80 \
+-v <本地数据存储位置>:/app/db \
+--name musicdl \
+zhouc1230/musicdl:latest
+```
+
+### 更新
+
+```bash
+# 拉取最新镜像
+docker pull zhouc1230/musicdl:latest
+# 停止旧容器
+docker stop musicdl
+# 删除旧容器
+docker rm musicdl
+# 启动新容器
+sudo docker run -d \
+--restart always -p <端口号>:80 \
 -v <本地数据存储位置>:/app/db \
 --name musicdl \
 zhouc1230/musicdl:latest
