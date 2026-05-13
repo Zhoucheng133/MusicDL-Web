@@ -13,7 +13,7 @@
 [Tauri ver.](https://github.com/Zhoucheng133/MusicDL-GUI) | [PyQt ver.](https://github.com/Zhoucheng133/MusicDL-PyQt) | ★ Web ver.
 
 >[!NOTE]
-> 这个项目（尤其是前端）使用CodeX开发
+> 这个项目（尤其是前端）重度使用Vibe Coding开发
 
 ## 截图
 
