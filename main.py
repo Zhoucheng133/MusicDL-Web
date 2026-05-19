@@ -18,6 +18,10 @@ def read_root(check=Depends(auth.check)):
 def refresh(check=Depends(auth.refresh)):
     return check
 
+@api.post("/logout")
+def logout(response: Response):
+    return auth.logout(response)
+
 @api.post("/register")
 def register(
     username: str = Body(""),

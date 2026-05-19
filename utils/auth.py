@@ -159,3 +159,11 @@ class Auth:
             return toResponse(False, "Token 已过期")
         except jwt.exceptions.DecodeError:
             return toResponse(False, "Token 解析错误")
+    
+    def logout(self, response: Response):
+        response.delete_cookie(
+            key="musicdl_refresh_token",
+            path="/api/refresh",
+            httponly=True, 
+        )
+        return toResponse(True, "注销成功")
