@@ -108,6 +108,14 @@ def progress(
         return check
     return core.get_progress()
 
+@api.get("/convert")
+def convert(
+    check=Depends(auth.check),
+):
+    if not check.get("ok"):
+        return check
+    return core.get_convert()
+
 @api.get("/list")
 def ls(
     check=Depends(auth.check),

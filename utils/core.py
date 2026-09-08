@@ -15,6 +15,7 @@ class Core:
     def __init__(self):
         self.lock=False
         self.progress=0
+        self.convert=False
         Path(DOWNLOAD_DIR).mkdir(parents=True, exist_ok=True)
         Path(CACHE_DIR).mkdir(parents=True, exist_ok=True)
         init_music_clients_cfg = dict()
@@ -48,6 +49,7 @@ class Core:
     
     def download_work(self, name: str, artist: str, url: str, cover: str, album: str, quality: str):
         self.progress = 0
+        self.convert = True
         self.lock = True
         try:
             with requests.get(url, stream=True, timeout=15) as r:
@@ -96,6 +98,7 @@ class Core:
                     os.remove(temp_path)
 
         finally:
+            self.convert=False
             self.progress = 0
             self.lock = False
     
@@ -113,6 +116,11 @@ class Core:
         if self.lock:
             return toResponse(True, self.progress)
         return toResponse(True, "没有在执行的任务")
+
+    def get_convert(self):
+        if self.lock:
+            return toResponse(True, self.convert) 
+        return toResponse(True, "没有在执行的任务") 
     
     def get_file(self, name: str, artist: str):
         if not name or not artist:
