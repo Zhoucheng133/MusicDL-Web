@@ -13,7 +13,9 @@
 [Tauri ver.](https://github.com/Zhoucheng133/MusicDL-GUI) | [PyQt ver.](https://github.com/Zhoucheng133/MusicDL-PyQt) | ★ Web ver.
 
 >[!NOTE]
-> 这个项目（尤其是前端）重度使用Vibe Coding开发
+> 这个项目（尤其是前端）重度使用Vibe Coding开发  
+> 搜索和下载的速度取决于[musicdl](https://github.com/CharlesPikachu/musicdl)使用的服务  
+> 内嵌ffmpeg，下载完成后会自动嵌入metadata信息
 
 ## 截图
 
